@@ -33,7 +33,7 @@ class Pet extends Model
     }
 
     // Con pet_status
-    public function petStatus(): HasOne
+    public function status(): HasOne
     {
         return $this->hasOne(PetStatus::class);
     }
