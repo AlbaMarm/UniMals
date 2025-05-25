@@ -4,6 +4,8 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
@@ -29,6 +31,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'is_admin',
+        'coins'
     ];
 
     /**
@@ -64,4 +68,37 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    // Relaciones
+
+    // Con pets
+    public function pet(): HasOne
+    {
+        return $this->hasOne(Pet::class);
+    }
+
+    // Con Personality_Tests
+    public function test(): HasOne
+    {
+        return $this->hasOne(PersonalityTest::class);
+    }
+
+    // Con interactions
+    public function interactions(): HasMany
+    {
+        return $this->hasMany(Interaction::class);
+    }
+
+    // Con coins
+    public function coins(): HasOne
+    {
+        return $this->hasOne(Coin::class);
+    }
+
+    // Con purchases
+    public function purchases(): HasMany
+    {
+        return $this->hasMany(Purchase::class);
+    }
+
 }
