@@ -54,20 +54,29 @@ class PersonalityTestController extends Controller
         $petType = PetType::where('name', $result)->first();
         if (!$petType) abort(500, "Pet type '$result' not found.");
 
-        Pet::create([
+        $pet = Pet::create([
             'user_id' => $user->id,
             'pet_type_id' => $petType->id,
             'name' => ucfirst($result),
             'test_result' => $result,
-            'happiness' => 50,
+            'happiness' => 1,
             'level' => 1,
         ]);
-        
+
+        $pet->status()->create([
+            'hunger' => 100,
+            'thirst' => 100,
+            'cleanliness' => 100,
+            'sleepiness' => 100,
+        ]);
+
         $user->refresh();
 
         session()->forget(['question1', 'question2', 'question3']);
-        
+
         Auth::setUser($user->fresh());
-        return redirect()->route('dashboard');
+        return redirect()
+            ->route('dashboard')
+            ->with('pet_result', $result);
     }
 }
