@@ -1,22 +1,36 @@
-<nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
+<nav x-data="{ open: false }" class="bg-[#bca16c] border-b border-gray-300 shadow">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16">
-            <div class="flex">
+        <div class="flex justify-between h-16 items-center">
+            <div class="flex items-center space-x-6">
                 <!-- Logo -->
-                <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}">
-                        <x-slot name="logo">
-                            <img src="{{ asset('images/appicon.svg') }}" alt="Logo" class="w-15 h-15 mx-auto">
-                        </x-slot>
-                    </a>
-                </div>
+                <!-- <a href="{{ route('dashboard') }}" class="shrink-0 flex items-center">
+                    <img src="{{ asset('images/appicon.svg') }}" alt="Logo" class="h-10 w-auto">
+                </a> -->
 
                 <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
-                    </x-nav-link>
+                <div class="hidden sm:flex space-x-6">
+                    @php
+                        $active = 'border-b-2 border-[#4b371c] text-[#4b371c] font-semibold';
+                        $inactive = 'text-white hover:text-[#eee] transition';
+                    @endphp
+
+                    <a href="{{ route('dashboard') }}"
+                        class="{{ request()->routeIs('dashboard') ? $active : $inactive }}">
+                        Home
+                    </a>
+                    <a href="#" class="{{ request()->is('kitchen') ? $active : $inactive }}">
+                        Kitchen
+                    </a>
+                    <a href="#" class="{{ request()->is('room') ? $active : $inactive }}">
+                        Room
+                    </a>
+                    <a href="#" class="{{ request()->is('bathroom') ? $active : $inactive }}">
+                        Bathroom
+                    </a>
+                    <a href="#" class="{{ request()->is('shop') ? $active : $inactive }}">
+                        Shop
+                    </a>
                 </div>
             </div>
 
@@ -117,9 +131,11 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
-            </x-responsive-nav-link>
+            <x-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">Home</x-responsive-nav-link>
+            <x-responsive-nav-link href="#">Kitchen</x-responsive-nav-link>
+            <x-responsive-nav-link href="#">Room</x-responsive-nav-link>
+            <x-responsive-nav-link href="#">Shop</x-responsive-nav-link>
+            <x-responsive-nav-link href="#">Bathroom</x-responsive-nav-link>
         </div>
 
         <!-- Responsive Settings Options -->
