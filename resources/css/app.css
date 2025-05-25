@@ -5,3 +5,15 @@
 [x-cloak] {
     display: none;
 }
+
+@layer components {
+  .input-autofill-verde {
+    @apply border border-green-500 focus:ring-green-500 focus:border-green-500;
+
+    &:-webkit-autofill {
+      box-shadow:
+        0 0 0px 1000px #dcfce7 inset;
+      -webkit-text-fill-color: #14532d !important;
+    }
+  }
+}
