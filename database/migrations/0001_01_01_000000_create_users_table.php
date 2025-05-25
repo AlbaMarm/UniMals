@@ -16,8 +16,11 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
+            $table->boolean('is_admin')->default(false);
             $table->string('password');
             $table->rememberToken();
+            // coins column
+            $table->integer('coins')->default(0);
             $table->foreignId('current_team_id')->nullable();
             $table->string('profile_photo_path', 2048)->nullable();
             $table->timestamps();
