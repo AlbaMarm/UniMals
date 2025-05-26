@@ -1,12 +1,15 @@
 <?php
 
 use App\Http\Controllers\PersonalityTestController;
+use App\Livewire\Bathroom;
+use App\Livewire\Home;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Redirect;
 
 Route::get('/', function () {
-    return view('dashboard');
+    return Redirect::route('login');
 });
 
 Route::middleware([
@@ -19,11 +22,14 @@ Route::middleware([
         ->name('personality.test');
     Route::post('/test/{step}', [PersonalityTestController::class, 'store']);
 
-   Route::middleware('hasTest')->group(function () {
-        Route::get('/dashboard', function () {
-            return view('dashboard');
-        })->name('dashboard');
+    Route::middleware('hasTest')->group(function () {
+        Route::get('/dashboard', Home::class)->name('dashboard');
     });
+
+    Route::middleware(['auth', 'verified'])->group(function () {
+        Route::get('/bathroom', Bathroom::class)->name('bathroom');
+    });
+
 
     Route::post('/pet/happiness', function (Request $request) {
         $pet = Auth::user()->pet;

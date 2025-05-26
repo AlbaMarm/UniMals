@@ -1,4 +1,7 @@
-<nav x-data="{ open: false }" class="bg-[#bca16c] border-b border-gray-300 shadow">
+@php
+$navBg = request()->is('bathroom') ? 'bg-[#a3c1a0]' : 'bg-[#bca16c]';
+@endphp
+<nav x-data="{ open: false }" class="{{ $navBg }} border-b border-gray-300 shadow">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16 items-center">
@@ -11,12 +14,17 @@
                 <!-- Navigation Links -->
                 <div class="hidden sm:flex space-x-6">
                     @php
-                        $active = 'border-b-2 border-[#4b371c] text-[#4b371c] font-semibold';
-                        $inactive = 'text-white hover:text-[#eee] transition';
+                    $route = request()->path();
+                    $active = 'border-b-2 font-semibold';
+                    $inactive = 'text-white hover:text-[#eee] transition';
+
+                    $bathActive = 'text-[#2e5236] border-[#2e5236]';
+                    $defaultActive = 'text-[#4b371c] border-[#4b371c]';
                     @endphp
 
+
                     <a href="{{ route('dashboard') }}"
-                        class="{{ request()->routeIs('dashboard') ? $active : $inactive }}">
+                        class="{{ request()->routeIs('dashboard') ? "$active $defaultActive" : $inactive }}">
                         Home
                     </a>
                     <a href="#" class="{{ request()->is('kitchen') ? $active : $inactive }}">
@@ -25,7 +33,8 @@
                     <a href="#" class="{{ request()->is('room') ? $active : $inactive }}">
                         Room
                     </a>
-                    <a href="#" class="{{ request()->is('bathroom') ? $active : $inactive }}">
+                    <a href="{{ route('bathroom') }}"
+                        class="{{ request()->is('bathroom') ? "$active $bathActive" : $inactive }}">
                         Bathroom
                     </a>
                     <a href="#" class="{{ request()->is('shop') ? $active : $inactive }}">
