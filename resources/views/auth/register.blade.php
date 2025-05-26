@@ -3,7 +3,7 @@
 @section('content')
     <x-authentication-card>
         <x-slot name="logo">
-            <x-authentication-card-logo />
+            <img src="{{ asset('images/appicon.svg') }}" alt="Logo" class="w-25 h-25 mx-auto">
         </x-slot>
 
         <x-validation-errors class="mb-4" />
