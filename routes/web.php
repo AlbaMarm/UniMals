@@ -3,6 +3,9 @@
 use App\Http\Controllers\PersonalityTestController;
 use App\Livewire\Bathroom;
 use App\Livewire\Home;
+use App\Livewire\Kitchen;
+use App\Livewire\Room;
+use App\Livewire\Shop;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
@@ -30,6 +33,17 @@ Route::middleware([
         Route::get('/bathroom', Bathroom::class)->name('bathroom');
     });
 
+    Route::middleware(['auth', 'verified'])->group(function () {
+        Route::get('/kitchen', Kitchen::class)->name('kitchen');
+    });
+
+    Route::middleware(['auth', 'verified'])->group(function () {
+        Route::get('/room', Room::class)->name('room');
+    });
+
+    Route::middleware(['auth', 'verified'])->group(function () {
+        Route::get('/shop', Shop::class)->name('shop');
+    });
 
     Route::post('/pet/happiness', function (Request $request) {
         $pet = Auth::user()->pet;
