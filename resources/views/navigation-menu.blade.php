@@ -1,6 +1,11 @@
 @php
-$navBg = request()->is('bathroom') ? 'bg-[#a3c1a0]' : 'bg-[#bca16c]';
+$navBg = match (true) {
+    request()->is('bathroom') => 'bg-[#a3c1a0]',  
+    request()->is('kitchen')  => 'bg-[#B8B95F]', 
+    default => 'bg-[#bca16c]',                    
+};
 @endphp
+
 <nav x-data="{ open: false }" class="{{ $navBg }} border-b border-gray-300 shadow">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -19,7 +24,9 @@ $navBg = request()->is('bathroom') ? 'bg-[#a3c1a0]' : 'bg-[#bca16c]';
                     $inactive = 'text-white hover:text-[#eee] transition';
 
                     $bathActive = 'text-[#2e5236] border-[#2e5236]';
+                    $kitchenActive = 'text-[#717331] border-[#717331]'; 
                     $defaultActive = 'text-[#4b371c] border-[#4b371c]';
+
                     @endphp
 
 
@@ -27,7 +34,8 @@ $navBg = request()->is('bathroom') ? 'bg-[#a3c1a0]' : 'bg-[#bca16c]';
                         class="{{ request()->routeIs('dashboard') ? "$active $defaultActive" : $inactive }}">
                         Home
                     </a>
-                    <a href="#" class="{{ request()->is('kitchen') ? $active : $inactive }}">
+                    <a href="{{ route('kitchen') }}" 
+                        class="{{ request()->is('kitchen') ? "$active $kitchenActive" : $inactive }}">
                         Kitchen
                     </a>
                     <a href="#" class="{{ request()->is('room') ? $active : $inactive }}">
@@ -141,10 +149,10 @@ $navBg = request()->is('bathroom') ? 'bg-[#a3c1a0]' : 'bg-[#bca16c]';
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">Home</x-responsive-nav-link>
-            <x-responsive-nav-link href="#">Kitchen</x-responsive-nav-link>
-            <x-responsive-nav-link href="#">Room</x-responsive-nav-link>
-            <x-responsive-nav-link href="#">Shop</x-responsive-nav-link>
-            <x-responsive-nav-link href="#">Bathroom</x-responsive-nav-link>
+            <x-responsive-nav-link href="{{ route('kitchen') }}" :active="request()->routeIs('kitchen')">Kitchen</x-responsive-nav-link>
+            <x-responsive-nav-link href="{{ route('room') }}" :active="request()->routeIs('room')">Room</x-responsive-nav-link>
+            <x-responsive-nav-link href="{{ route('bathroom') }}" :active="request()->routeIs('bathroom')">Bathroom</x-responsive-nav-link>
+            <x-responsive-nav-link href="{{ route('shop') }}" :active="request()->routeIs('shop')">Shop</x-responsive-nav-link>
         </div>
 
         <!-- Responsive Settings Options -->
