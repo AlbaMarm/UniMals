@@ -1,7 +1,9 @@
 @php
 $navBg = match (true) {
     request()->is('bathroom') => 'bg-[#a3c1a0]',  
-    request()->is('kitchen')  => 'bg-[#B8B95F]', 
+    request()->is('kitchen')  => 'bg-[#B8B95F]',
+    request()->is('room')     => 'bg-[#80AFC8]', 
+    request()->is('shop')     => 'bg-[#d8c4b0]',
     default => 'bg-[#bca16c]',                    
 };
 @endphp
@@ -24,6 +26,7 @@ $navBg = match (true) {
                     $inactive = 'text-white hover:text-[#eee] transition';
 
                     $bathActive = 'text-[#2e5236] border-[#2e5236]';
+                    $roomActive = 'text-[#11405A] border-[#11405A]';
                     $kitchenActive = 'text-[#717331] border-[#717331]'; 
                     $defaultActive = 'text-[#4b371c] border-[#4b371c]';
 
@@ -38,7 +41,7 @@ $navBg = match (true) {
                         class="{{ request()->is('kitchen') ? "$active $kitchenActive" : $inactive }}">
                         Kitchen
                     </a>
-                    <a href="#" class="{{ request()->is('room') ? $active : $inactive }}">
+                    <a href="{{ route('room') }}" class="{{ request()->is('room') ? "$active $roomActive" : $inactive }}">
                         Room
                     </a>
                     <a href="{{ route('bathroom') }}"
