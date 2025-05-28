@@ -1,9 +1,10 @@
 @php
-    $hideNav = request()->is('test*');
+$hideNav = request()->is('test*');
 @endphp
 
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -67,6 +68,30 @@
     @stack('modals')
 
     @livewireScripts
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    @if (session('message'))
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Done!',
+            text: "{{ session('message') }}",
+            timer: 2000,
+            showConfirmButton: false,
+        });
+    </script>
+    @endif
+
+    @if (session('error'))
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: "{{ session('error') }}",
+        });
+    </script>
+    @endif
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const petImage = document.getElementById('pet-image');
