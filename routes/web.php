@@ -57,4 +57,19 @@ Route::middleware([
 
         return response()->json(['error' => 'Pet not found'], 404);
     })->name('pet.happiness');
+
+    Route::post('/pet/rename', function (Illuminate\Http\Request $request) {
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        $pet = Auth::user()->pet;
+        if ($pet) {
+            $pet->name = $request->name;
+            $pet->save();
+            return redirect()->back()->with('message', 'Pet name updated successfully!');
+        }
+
+        return redirect()->back()->with('error', 'No pet found.');
+    })->name('pet.rename');
 });
