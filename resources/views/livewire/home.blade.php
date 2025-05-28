@@ -25,7 +25,7 @@
             const alert = document.getElementById('pet-alert');
             if (alert) {
                 alert.classList.add('opacity-0');
-                setTimeout(() => alert.remove(), 500);
+                setTimeout(() => alert.remove(), 1000);
             }
         }, 4000);
     </script>
@@ -37,7 +37,7 @@
         {{-- Monedas --}}
         <div class="flex items-center space-x-4 bg-white bg-opacity-90 border border-gray-200 rounded-full px-6 py-4 shadow-2xl">
             <img src="{{ asset('images/icons/money.png') }}" class="h-10 w-10 hover-bounce" alt="Coins">
-            <span class="text-gray-800 text-3xl font-extrabold">{{ $coins }}</span>
+            <span id="coin-value" class="text-gray-800 text-3xl font-extrabold">{{ $coins }}</span>
         </div>
 
         {{-- Felicidad --}}
@@ -51,9 +51,17 @@
     {{-- Mascota centrada --}}
     <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
 
-        <div class="bg-white bg-opacity-80 px-4 py-1 rounded-full shadow-md mb-2 inline-block font-semibold text-gray-800 mt-8 md:mt-16">
-            {{ ucfirst($pet->petType->name) }}
+        <div ondblclick="document.getElementById('edit-pet-name-form').classList.remove('hidden')"
+            class="bg-white bg-opacity-80 px-4 py-1 rounded-full shadow-md mb-2 inline-block font-semibold text-gray-800 mt-8 md:mt-16 cursor-pointer">
+            {{ ucfirst($pet->name) }}
         </div>
+        <form id="edit-pet-name-form" method="POST" action="{{ route('pet.rename') }}" class="hidden mt-2">
+            @csrf
+            <input type="text" name="name" class="rounded px-2 py-1" placeholder="New name" required>
+            <!-- <button type="submit" class="ml-2 px-3 py-1 bg-green-600 text-white rounded">Save</button> -->
+        </form>
+
+
         <img
             id="pet-image"
             data-pet="{{ strtolower($pet->petType->name) }}"
@@ -61,7 +69,9 @@
             alt="Pet"
             class="h-40 md:h-80 drop-shadow-2xl mx-auto transition-transform duration-300">
 
-        <div class="mt-2 text-2xl font-bold text-purple-700">Lvl: {{ $pet->level }}</div>
+        <div class="mt-2 text-4xl font-extrabold text-white outline-white outline-2 outline px-4 py-1 rounded-full" style="text-shadow: 0 0 4px #fff, 0 0 8px #fff;">
+            Lvl: {{ $pet->level }}
+        </div>
     </div>
 
     {{-- Panel de estadísticas --}}
