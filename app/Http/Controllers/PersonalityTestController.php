@@ -59,7 +59,7 @@ class PersonalityTestController extends Controller
             'pet_type_id' => $petType->id,
             'name' => ucfirst($result),
             'test_result' => $result,
-            'happiness' => 1,
+            'happiness' => 0,
             'level' => 1,
         ]);
 
@@ -69,6 +69,11 @@ class PersonalityTestController extends Controller
             'cleanliness' => 100,
             'sleepiness' => 100,
         ]);
+
+        $user->coins()->create([
+            'balance' => 0
+        ]);
+
 
         $user->refresh();
 
