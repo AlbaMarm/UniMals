@@ -10,7 +10,7 @@ class Home extends Component
     
     public function render()
     {
-        $user = Auth::user();
+        $user = Auth::user()->load('coins', 'pet.status');
         $pet = $user->pet;
         $coins = $user->coins->balance ?? 0;
         $status = $pet->status ?? null;

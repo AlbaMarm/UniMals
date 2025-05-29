@@ -14,7 +14,7 @@ class Room extends Component
 
     public function mount()
     {
-        $user = Auth::user();
+        $user = Auth::user()->load('coins', 'pet.status');
         $this->pet = $user->pet;
         $this->coins = $user->coins->balance ?? 0;
         $this->status = $this->pet->status ?? null;
@@ -32,6 +32,6 @@ class Room extends Component
     public function render()
     {
         return view('livewire.room')
-        ->layout('layouts.app');;
+        ->layout('layouts.app');
     }
 }
