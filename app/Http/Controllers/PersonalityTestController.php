@@ -70,9 +70,9 @@ class PersonalityTestController extends Controller
             'sleepiness' => 100,
         ]);
 
-        $user->coins()->create([
+        /* $user->coins()->create([
             'balance' => 0
-        ]);
+        ]); */
 
 
         $user->refresh();
