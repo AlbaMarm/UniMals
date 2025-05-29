@@ -39,6 +39,10 @@ $hideNav = request()->is('test*');
         .hover-bounce:hover {
             transform: translateY(-8px) rotate(-3deg);
         }
+
+        body {
+            cursor: url('/images/cursor/cursormano.png') 16 16, auto;
+        }
     </style>
 </head>
 
@@ -96,6 +100,7 @@ $hideNav = request()->is('test*');
         document.addEventListener('DOMContentLoaded', () => {
             const petImage = document.getElementById('pet-image');
             const happinessText = document.getElementById('happiness-value');
+            const coinText = document.getElementById('coin-value');
 
             if (petImage) {
                 const spritePath = petImage.getAttribute('src');
@@ -103,11 +108,16 @@ $hideNav = request()->is('test*');
                 const idleSprite = spritePath;
 
                 petImage.addEventListener('click', () => {
+                    // Animación
                     petImage.style.transform = 'scale(0.95)';
-                    setTimeout(() => petImage.style.transform = 'scale(1)', 150);
                     petImage.src = happySprite;
 
-                    // Petición para actualizar felicidad, he puesto csrf token y route de Laravel
+                    setTimeout(() => {
+                        petImage.style.transform = 'scale(1)';
+                        petImage.src = idleSprite;
+                    }, 1000);
+
+                    // AJAX: Actualizar felicidad y monedas
                     fetch("{{ route('pet.happiness') }}", {
                             method: 'POST',
                             headers: {
@@ -118,19 +128,28 @@ $hideNav = request()->is('test*');
                         })
                         .then(response => response.json())
                         .then(data => {
-                            if (data.happiness !== undefined) {
+                            if (data.happiness !== undefined && happinessText) {
                                 happinessText.textContent = data.happiness;
                             }
+
+                            if (data.balance !== undefined && coinText) {
+                                coinText.textContent = data.balance;
+                            }
+
+                            if (data.earned && data.earned > 0) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'You earned a coin!',
+                                    timer: 1500,
+                                    showConfirmButton: false,
+                                });
+                            }
                         });
-
-                    setTimeout(() => {
-                        petImage.src = idleSprite;
-                    }, 1000);
-
                 });
             }
         });
     </script>
+
 
 
     <script>
