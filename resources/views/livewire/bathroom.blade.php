@@ -1,4 +1,4 @@
-<div class="relative min-h-screen bg-cover bg-center overflow-x-hidden" style="background-image: url('{{ asset('images/Group 1.jpg') }}');">
+<div wire:poll.30s class="relative min-h-screen bg-cover bg-center overflow-x-hidden" style="background-image: url('{{ asset('images/Group 1.jpg') }}');">
 
     @if($pet)
     {{-- HUD superior --}}

@@ -1,4 +1,4 @@
-<div class="relative min-h-screen bg-cover bg-center overflow-x-hidden" style="background-image: url('{{ asset('images/background_roomm.jpg') }}');">
+<div wire:poll.30s class="relative min-h-screen bg-cover bg-center overflow-x-hidden" style="background-image: url('{{ asset('images/background_roomm.jpg') }}');">
 
     {{-- AVISO de resultado del test --}}
     @if (session('pet_result'))

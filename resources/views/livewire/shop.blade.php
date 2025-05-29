@@ -1,4 +1,4 @@
-<div class="relative min-h-screen bg-cover bg-center" style="background-image: url('{{ asset('images/shopBack.jpg') }}')">
+<div wire:poll.30s class="relative min-h-screen bg-cover bg-center" style="background-image: url('{{ asset('images/shopBack.jpg') }}')">
 
     {{-- Coins arriba a la derecha --}}
     <div class="absolute top-1 left-6 bg-white/80 rounded-full px-5 py-3 flex items-center space-x-2 shadow-xl z-20">
