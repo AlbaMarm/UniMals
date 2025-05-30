@@ -14,7 +14,7 @@ $navBg = match (true) {
         <div class="flex justify-between h-16 items-center">
             <div class="flex items-center space-x-6">
                 <!-- Logo -->
-                <!-- <a href="{{ route('dashboard') }}" class="shrink-0 flex items-center">
+                <!-- <a href="{{ route('dashboard') }}" class="shrink-0 flex">
                     <img src="{{ asset('images/appicon.svg') }}" alt="Logo" class="h-10 w-auto">
                 </a> -->
 
