@@ -11,6 +11,7 @@ class Room extends Component
     public $coins;
     public $status;
     public $statsList = [];
+    protected $listeners = ['refreshComponent' => '$refresh'];
 
     public function mount()
     {
