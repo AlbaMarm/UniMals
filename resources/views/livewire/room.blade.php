@@ -14,14 +14,25 @@
             <img src="{{ asset('images/icons/happy.png') }}" class="h-14 w-14 hover-bounce" alt="Happiness">
             <span id="happiness-value" class="text-white text-5xl font-extrabold">{{ $pet->happiness }}</span>
         </div>
+
+        {{-- Botón Dormir --}}
+        <div class="absolute top-60 left-4 z-20">
+            <button id="sleep-toggle"
+                class="bg-black text-white text-xl px-10 py-10 rounded-full shadow-lg hover:bg-gray-800 transition font-bold">
+                ON
+            </button>
+        </div>
+
+        <div id="sleep-overlay"></div>
     </div>
+
 
 
     {{-- Mascota centrada --}}
     <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
 
         <div ondblclick="document.getElementById('edit-pet-name-form').classList.remove('hidden')"
-            class="bg-white bg-opacity-80 px-4 py-1 rounded-full shadow-md mb-2 inline-block font-semibold text-gray-800 mt-8 md:mt-16 cursor-pointer">
+            class="bg-white bg-opacity-80 px-4 py-1 rounded-full shadow-md mb-2 inline-block font-semibold text-gray-800 mt-8 md:mt-16 cursor-custom-click">
             {{ ucfirst($pet->name) }}
         </div>
         <form id="edit-pet-name-form" method="POST" action="{{ route('pet.rename') }}" class="hidden mt-2">
@@ -36,7 +47,7 @@
             alt="Pet"
             class="h-40 md:h-80 drop-shadow-2xl mx-auto transition-transform duration-300">
 
-        <div class="mt-2 text-4xl font-extrabold text-white outline-white outline-2 outline px-4 py-1 rounded-full" style="text-shadow: 0 0 4px #fff, 0 0 8px #fff;">
+        <div id="pet-level" class="mt-2 text-4xl font-extrabold text-white outline-white outline-2 outline px-4 py-1 rounded-full" style="text-shadow: 0 0 4px #fff, 0 0 8px #fff;">
             Lvl: {{ $pet->level }}
         </div>
     </div>
