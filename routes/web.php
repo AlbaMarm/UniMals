@@ -53,6 +53,15 @@ Route::middleware([
         if ($pet) {
             $lastHappiness = $pet->getOriginal('happiness');
             $pet->happiness = min(1000, $pet->happiness + 1);
+
+            $leveledUp = false;
+            $oldLevel = $pet->level;
+            $newLevel = floor($pet->happiness / 100) + 1;
+            if ($newLevel > $oldLevel) {
+                $pet->level = $newLevel;
+                $leveledUp = true;
+            }
+
             $pet->save();
 
             $coinsEarned = 0;
@@ -82,6 +91,8 @@ Route::middleware([
                 'happiness' => $pet->happiness,
                 'balance' => $balance,
                 'earned' => $coinsEarned,
+                'leveledUp' => $leveledUp,
+                'level' => $pet->level,
             ]);
         }
 
@@ -102,4 +113,21 @@ Route::middleware([
 
         return redirect()->back()->with('error', 'No pet found.');
     })->name('pet.rename');
+
+    Route::post('/pet/sleep', function () {
+        $user = Auth::user();
+        $status = $user->pet->status;
+
+        if ($status) {
+            $status->sleepiness = min(100, $status->sleepiness + 5);
+            $status->save();
+
+            return response()->json([
+                'success' => true,
+                'sleepiness' => $status->sleepiness
+            ]);
+        }
+
+        return response()->json(['success' => false], 404);
+    })->name('pet.sleep');
 });

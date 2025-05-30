@@ -45,7 +45,7 @@
         <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
 
             <div ondblclick="document.getElementById('edit-pet-name-form').classList.remove('hidden')"
-                class="bg-white bg-opacity-80 px-4 py-1 rounded-full shadow-md mb-2 inline-block font-semibold text-gray-800 mt-8 md:mt-16 cursor-pointer">
+                class="bg-white bg-opacity-80 px-4 py-1 rounded-full shadow-md mb-2 inline-block font-semibold text-gray-800 mt-8 md:mt-16 cursor-custom-click">
                 {{ ucfirst($pet->name) }}
             </div>
             <form id="edit-pet-name-form" method="POST" action="{{ route('pet.rename') }}" class="hidden mt-2">
@@ -62,7 +62,7 @@
                 alt="Pet"
                 class="h-40 md:h-80 drop-shadow-2xl mx-auto transition-transform duration-300">
 
-            <div class="mt-2 text-4xl font-extrabold text-white outline-white outline-2 outline px-4 py-1 rounded-full" style="text-shadow: 0 0 4px #fff, 0 0 8px #fff;">
+            <div id="pet-level" class="mt-2 text-4xl font-extrabold text-white outline-white outline-2 outline px-4 py-1 rounded-full" style="text-shadow: 0 0 4px #fff, 0 0 8px #fff;">
                 Lvl: {{ $pet->level }}
             </div>
         </div>
