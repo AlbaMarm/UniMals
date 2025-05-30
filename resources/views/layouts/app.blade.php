@@ -40,8 +40,37 @@ $hideNav = request()->is('test*');
             transform: translateY(-8px) rotate(-3deg);
         }
 
+        /* Cursores */
         body {
             cursor: url('/images/cursor/cursormano.png') 16 16, auto;
+        }
+
+        button, a, .clickable {
+            cursor: url('/images/cursor/cursordedo.png') 16 16, pointer;
+        }
+
+        .cursor-custom-click {
+            cursor: url('/images/cursor/cursordedo.png') 16 16, pointer;
+        }
+
+
+       /*  .clickable {
+            cursor: pointer;
+        } */   
+
+        #sleep-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(10, 10, 10, 0.7);
+            z-index: 10;
+            display: none;
+        }
+
+        .pet-sleeping {
+            filter: grayscale(100%) brightness(0.7);
         }
     </style>
 </head>
@@ -144,6 +173,24 @@ $hideNav = request()->is('test*');
                                     showConfirmButton: false,
                                 });
                             }
+
+                            if (data.level !== undefined) {
+                                const levelDisplay = document.getElementById('pet-level');
+                                if (levelDisplay) {
+                                    levelDisplay.textContent = 'Lvl: ' + data.level;
+                                }
+
+                                if (data.leveledUp) {
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Your pet has leveled up!',
+                                        text: 'Now its ' + data.level + ' :)',
+                                        timer: 2000,
+                                        showConfirmButton: false,
+                                    });
+                                }
+                            }
+
                         });
                 });
             }
@@ -167,6 +214,57 @@ $hideNav = request()->is('test*');
             }
         });
     </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sleepToggle = document.getElementById('sleep-toggle');
+            const overlay = document.getElementById('sleep-overlay');
+            const petImage = document.getElementById('pet-image');
+            const originalSprite = petImage.getAttribute('src');
+            const sleepingSprite = originalSprite.replace('_idle.png', '_sleeping.png');
+
+            let sleeping = false;
+            let sleepInterval = null;
+            
+
+            if (sleepToggle && overlay && petImage) {
+                sleepToggle.addEventListener('click', () => {
+                    sleeping = !sleeping;
+
+                    if (sleeping) {
+                        sleepToggle.textContent = 'OFF';
+                        overlay.style.display = 'block';
+                        petImage.src = sleepingSprite;
+
+                        sleepInterval = setInterval(() => {
+                            fetch("{{ route('pet.sleep') }}", {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                    },
+                                    body: JSON.stringify({})
+                                })
+                                .then(res => res.json())
+                                .then(data => {
+                                    if (data.sleepiness !== undefined) {
+                                        const sleepBar = document.querySelector('[data-stat="sleepiness"]');
+                                        if (sleepBar) sleepBar.style.width = data.sleepiness + '%';
+                                    }
+                                });
+                        }, 2000);
+
+                    } else {
+                        sleepToggle.textContent = 'ON';
+                        overlay.style.display = 'none';
+                        petImage.src = originalSprite;
+                        clearInterval(sleepInterval);
+                    }
+                });
+            }
+        });
+    </script>
+
 </body>
 
 </html>
