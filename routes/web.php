@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\PersonalityTestController;
+use App\Http\Controllers\PetActionController;
+use App\Http\Controllers\petController;
 use App\Livewire\Bathroom;
 use App\Livewire\Home;
 use App\Livewire\Kitchen;
@@ -46,88 +48,23 @@ Route::middleware([
         Route::get('/shop', Shop::class)->name('shop');
     });
 
-    Route::post('/pet/happiness', function (Request $request) {
-        $user = Auth::user();
-        $pet = $user->pet;
+    Route::post('/pet/happiness', [PetActionController::class, 'increaseHappiness'])->name('pet.happiness');
 
-        if ($pet) {
-            $lastHappiness = $pet->getOriginal('happiness');
-            $pet->happiness = min(1000, $pet->happiness + 1);
+    Route::post('/pet/rename', [PetActionController::class, 'rename'])->name('pet.rename');
 
-            $leveledUp = false;
-            $oldLevel = $pet->level;
-            $newLevel = floor($pet->happiness / 100) + 1;
-            if ($newLevel > $oldLevel) {
-                $pet->level = $newLevel;
-                $leveledUp = true;
-            }
+     /* Ruta Web dormir */
+    Route::post('/pet/sleep', [PetActionController::class, 'sleep'])->name('pet.sleep');
 
-            $pet->save();
+    /* Ruta Web comer */
+    Route::post('/pet/eat', [PetActionController::class, 'eat'])->name('pet.eat');
 
-            $coinsEarned = 0;
+    /* Ruta Web beber */
+    Route::post('/pet/drink', [PetActionController::class, 'drink'])->name('pet.drink');
 
-            if (floor($pet->happiness / 10) > floor($lastHappiness / 10)) {
-                // Este bloque asegura que actualizas o creas la fila (sin duplicar)
-                $existing = DB::table('coins')->where('user_id', $user->id)->first();
+    /* Ruta Web bañar */
+    Route::post('/pet/bathe', [PetActionController::class, 'bathe'])->name('pet.bathe');
 
-                if ($existing) {
-                    DB::table('coins')->where('user_id', $user->id)->increment('balance');
-                } else {
-                    DB::table('coins')->insert([
-                        'user_id' => $user->id,
-                        'balance' => 1,
-                        'created_at' => now(),
-                        'updated_at' => now(),
-                    ]);
-                }
+    Route::get('/pet/stats', [PetController::class, 'stats'])->name('pet.stats');
 
-                $coinsEarned = 1;
-            }
 
-            // Vuelve a consultar el balance actual
-            $balance = DB::table('coins')->where('user_id', $user->id)->value('balance');
-
-            return response()->json([
-                'happiness' => $pet->happiness,
-                'balance' => $balance,
-                'earned' => $coinsEarned,
-                'leveledUp' => $leveledUp,
-                'level' => $pet->level,
-            ]);
-        }
-
-        return response()->json(['error' => 'Pet not found'], 404);
-    })->name('pet.happiness');
-
-    Route::post('/pet/rename', function (Illuminate\Http\Request $request) {
-        $request->validate([
-            'name' => 'required|string|max:255',
-        ]);
-
-        $pet = Auth::user()->pet;
-        if ($pet) {
-            $pet->name = $request->name;
-            $pet->save();
-            return redirect()->back()->with('message', 'Pet name updated successfully!');
-        }
-
-        return redirect()->back()->with('error', 'No pet found.');
-    })->name('pet.rename');
-
-    Route::post('/pet/sleep', function () {
-        $user = Auth::user();
-        $status = $user->pet->status;
-
-        if ($status) {
-            $status->sleepiness = min(100, $status->sleepiness + 5);
-            $status->save();
-
-            return response()->json([
-                'success' => true,
-                'sleepiness' => $status->sleepiness
-            ]);
-        }
-
-        return response()->json(['success' => false], 404);
-    })->name('pet.sleep');
 });
