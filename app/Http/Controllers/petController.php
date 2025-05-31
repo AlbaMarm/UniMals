@@ -21,6 +21,30 @@ class petController extends Controller
         return response()->json(['error' => 'Pet not found'], 404);
     }
 
+    public function stats()
+    {
+
+        $pet = auth()->user()->pet;
+        if (!$pet || !$pet->status) {
+            return response()->json([
+                'hunger' => 0,
+                'thirst' => 0,
+                'cleanliness' => 0,
+                'sleepiness' => 0,
+            ]);
+        }
+        
+        $status = $pet->status;
+
+        return response()->json([
+            'hunger' => $status->hunger,
+            'thirst' => $status->thirst,
+            'cleanliness' => $status->cleanliness,
+            'sleepiness' => $status->sleepiness,
+        ]);
+    }
+
+
     /**
      * Display a listing of the resource.
      */
