@@ -14,6 +14,14 @@
             <img src="{{ asset('images/icons/happy.png') }}" class="h-14 w-14 hover-bounce" alt="Happiness">
             <span id="happiness-value" class="text-white text-5xl font-extrabold">{{ $pet->happiness }}</span>
         </div>
+
+        {{-- Botón Bañarse --}}
+        <div class="absolute top-60 left-4 z-20">
+            <button id="clean-button"
+                class="bg-green-600 text-white text-xl px-10 py-10 rounded-full shadow-lg hover:bg-green-800 hover:text-green-300 transition font-bold">
+                CLEAN
+            </button>
+        </div>
     </div>
 
 
@@ -36,6 +44,8 @@
             alt="Pet"
             class="h-40 md:h-80 drop-shadow-2xl mx-auto transition-transform duration-300">
 
+        <img id="bubbles-image" src="{{ asset('images/bubbles.png') }}" class="bubbles" />
+
         <div id="pet-level" class="mt-2 text-4xl font-extrabold text-white outline-white outline-2 outline px-4 py-1 rounded-full" style="text-shadow: 0 0 4px #fff, 0 0 8px #fff;">
             Lvl: {{ $pet->level }}
         </div>
@@ -44,14 +54,7 @@
     {{-- PANEL DE ESTADÍSTICAS --}}
     <x-statspanel :statsList="$statsList" background="images/bathtexture.png" />
 
-    {{-- BOTÓN SHOWER --}}
-    <div class="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-30">
-        <button class="px-8 py-3 bg-white/30 text-white border border-white rounded-full font-bold shadow-lg hover:bg-white/40 transition">
-            SHOWER
-        </button>
-    </div>
-
     @else
-    <div class="p-6 text-white">No pet assigned</div>
+    <div class="p-6 text-white">NO PET ASSIGNED YET, GO TO HOME !!</div>
     @endif
 </div>
