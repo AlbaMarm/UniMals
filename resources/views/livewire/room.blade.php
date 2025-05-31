@@ -19,7 +19,7 @@
         <div class="absolute top-60 left-4 z-20">
             <button id="sleep-toggle"
                 class="bg-black text-white text-xl px-10 py-10 rounded-full shadow-lg hover:bg-gray-800 transition font-bold">
-                ON
+                OFF
             </button>
         </div>
 

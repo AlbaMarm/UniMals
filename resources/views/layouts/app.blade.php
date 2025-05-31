@@ -45,7 +45,9 @@ $hideNav = request()->is('test*');
             cursor: url('/images/cursor/cursormano.png') 16 16, auto;
         }
 
-        button, a, .clickable {
+        button,
+        a,
+        .clickable {
             cursor: url('/images/cursor/cursordedo.png') 16 16, pointer;
         }
 
@@ -54,9 +56,9 @@ $hideNav = request()->is('test*');
         }
 
 
-       /*  .clickable {
+        /*  .clickable {
             cursor: pointer;
-        } */   
+        } */
 
         #sleep-overlay {
             position: fixed;
@@ -71,6 +73,19 @@ $hideNav = request()->is('test*');
 
         .pet-sleeping {
             filter: grayscale(100%) brightness(0.7);
+        }
+
+        .bubbles {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            height: 12rem;
+            z-index: 20;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease-in-out;
+            animation: float 2s ease-in-out infinite;
         }
     </style>
 </head>
@@ -167,9 +182,12 @@ $hideNav = request()->is('test*');
 
                             if (data.earned && data.earned > 0) {
                                 Swal.fire({
-                                    icon: 'success',
+                                    imageUrl: 'images/icons/dollar.png',
+                                    imageWidth: 100,
+                                    imageHeight: 100,
+                                    imageAlt: 'coin icon',
                                     title: 'You earned a coin!',
-                                    timer: 1500,
+                                    timer: 2000,
                                     showConfirmButton: false,
                                 });
                             }
@@ -182,9 +200,12 @@ $hideNav = request()->is('test*');
 
                                 if (data.leveledUp) {
                                     Swal.fire({
-                                        icon: 'success',
+                                        imageUrl: 'images/icons/star.png',
+                                        imageWidth: 100,
+                                        imageHeight: 100,
+                                        imageAlt: 'level up icon',
                                         title: 'Your pet has leveled up!',
-                                        text: 'Now its ' + data.level + ' :)',
+                                        text: 'Level ' + data.level + ' :D',
                                         timer: 2000,
                                         showConfirmButton: false,
                                     });
@@ -215,6 +236,7 @@ $hideNav = request()->is('test*');
         });
     </script>
 
+    <!-- Script animacion sueño -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const sleepToggle = document.getElementById('sleep-toggle');
@@ -225,14 +247,14 @@ $hideNav = request()->is('test*');
 
             let sleeping = false;
             let sleepInterval = null;
-            
+
 
             if (sleepToggle && overlay && petImage) {
                 sleepToggle.addEventListener('click', () => {
                     sleeping = !sleeping;
 
                     if (sleeping) {
-                        sleepToggle.textContent = 'OFF';
+                        sleepToggle.textContent = 'ON';
                         overlay.style.display = 'block';
                         petImage.src = sleepingSprite;
 
@@ -255,7 +277,7 @@ $hideNav = request()->is('test*');
                         }, 2000);
 
                     } else {
-                        sleepToggle.textContent = 'ON';
+                        sleepToggle.textContent = 'OFF';
                         overlay.style.display = 'none';
                         petImage.src = originalSprite;
                         clearInterval(sleepInterval);
@@ -264,6 +286,123 @@ $hideNav = request()->is('test*');
             }
         });
     </script>
+
+    <!-- Script animacion comer y beber -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const eatToggle = document.getElementById('eat-toggle');
+            const drinkToggle = document.getElementById('drink-toggle');
+            const petImage = document.getElementById('pet-image');
+            const originalSprite = petImage.getAttribute('src');
+            const eatingSprite = originalSprite.replace('_idle.png', '_eating.png');
+            const drinkingSprite = originalSprite.replace('_idle.png', '_drinking.png');
+
+            if (eatToggle && drinkToggle && petImage) {
+                eatToggle.addEventListener('click', () => {
+                    petImage.src = eatingSprite;
+
+                    fetch("{{ route('pet.eat') }}", {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            },
+                            body: JSON.stringify({})
+                        })
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.hunger !== undefined) {
+                                const hungerBar = document.querySelector('[data-stat="hunger"]');
+                                if (hungerBar) hungerBar.style.width = data.hunger + '%';
+                            }
+                        });
+
+                    setTimeout(() => {
+                        petImage.src = originalSprite;
+                    }, 2000);
+                });
+
+                drinkToggle.addEventListener('click', () => {
+                    petImage.src = drinkingSprite;
+
+                    fetch("{{ route('pet.drink') }}", {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            },
+                            body: JSON.stringify({})
+                        })
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.thirst !== undefined) {
+                                const thirstBar = document.querySelector('[data-stat="thirst"]');
+                                if (thirstBar) thirstBar.style.width = data.thirst + '%';
+                            }
+                        });
+
+                    setTimeout(() => {
+                        petImage.src = originalSprite;
+                    }, 2000);
+                });
+            }
+        });
+    </script>
+
+    <!-- script animacion burbujas baño -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const cleanButton = document.getElementById('clean-button');
+            const bubblesImage = document.getElementById('bubbles-image');
+
+            if (cleanButton && bubblesImage) {
+                cleanButton.addEventListener('click', () => {
+                    bubblesImage.style.opacity = '1';
+
+                    fetch("{{ route('pet.bathe') }}", {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            },
+                            body: JSON.stringify({})
+                        })
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.cleanliness !== undefined) {
+                                const cleanlinessBar = document.querySelector('[data-stat="cleanliness"]');
+                                if (cleanlinessBar) cleanlinessBar.style.width = data.cleanliness + '%';
+                            }
+                        });
+
+                    setTimeout(() => {
+                        bubblesImage.style.opacity = '0';
+                    }, 2500);
+                });
+            }
+        });
+    </script>
+    <script>
+        setInterval(() => {
+            fetch("{{ route('pet.stats') }}")
+                .then(res => res.json())
+                .then(data => {
+                    if (data.hunger !== undefined) {
+                        document.querySelector('[data-stat="hunger"]').style.width = data.hunger + '%';
+                    }
+                    if (data.thirst !== undefined) {
+                        document.querySelector('[data-stat="thirst"]').style.width = data.thirst + '%';
+                    }
+                    if (data.cleanliness !== undefined) {
+                        document.querySelector('[data-stat="cleanliness"]').style.width = data.cleanliness + '%';
+                    }
+                    if (data.sleepiness !== undefined) {
+                        document.querySelector('[data-stat="sleepiness"]').style.width = data.sleepiness + '%';
+                    }
+                });
+        }, 1000);
+    </script>
+
 
 </body>
 
