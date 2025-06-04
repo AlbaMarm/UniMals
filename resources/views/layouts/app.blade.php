@@ -1,6 +1,10 @@
 @php
 $hideNav = request()->is('test*');
 @endphp
+@php
+$hideLoader = request()->is('test*');
+@endphp
+
 
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
@@ -14,7 +18,7 @@ $hideNav = request()->is('test*');
 
     <!-- Fontawesome -->
     <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"/>
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
 
     <!-- Sweetalert -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -105,7 +109,7 @@ $hideNav = request()->is('test*');
         .tooltip-message {
             visibility: hidden;
             width: max-content;
-            background-color:#000000;
+            background-color: #000000;
             color: #ffffff;
             text-align: center;
             border-radius: 6px;
@@ -144,12 +148,14 @@ $hideNav = request()->is('test*');
 <body class="font-sans antialiased">
     <x-banner />
     <!-- Pantalla de carga -->
+    @if (!$hideLoader)
     <div id="loader-overlay" class="fixed inset-0 bg-white z-50 flex items-center justify-center transition-opacity duration-500">
         <div class="loader-animation text-center">
             <img src="{{ asset('images/icons/loading.gif') }}" class="w-24 h-24 mb-4" alt="Loading...">
             <p class="text-gray-600 font-medium">Loading...</p>
         </div>
     </div>
+    @endif
 
 
     <div class="min-h-screen bg-gray-100">
