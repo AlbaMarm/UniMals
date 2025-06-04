@@ -12,7 +12,8 @@ class Accessory extends Model
         'type', 
         'price', 
         'happiness_effect', 
-        'description'
+        'description',
+        'image',
     ];
 
     public function purchases(): HasMany

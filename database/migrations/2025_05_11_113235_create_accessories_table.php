@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('type');
+            $table->string('image');
             $table->decimal('price', 10, 2);
             $table->integer('happiness_effect');
             $table->text('description')->nullable();
