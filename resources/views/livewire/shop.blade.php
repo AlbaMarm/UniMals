@@ -11,35 +11,38 @@
 
         {{-- Estantería y productos --}}
         <div class="relative w-[350px]">
-            <img src="{{ asset('images/shelf.png') }}" class="w-full" alt="Shelf">
+            <img src="{{ asset('images/shelf.png') }}" class="w-full absolute top-0 left-0 z-0" alt="Shelf">
 
-            {{-- Producto 1 --}}
-            <div class="absolute top-[140px] left-[40px] flex items-center space-x-4">
-                <img src="{{ asset('images/items/basketball.png') }}" class="h-40 w-40 hover-bounce" alt="Ball">
-                <div class="flex items-center space-x-2">
-                    <span class="text-2xl text-yellow-600 font-bold">3</span>
-                    <button class="border-2 border-yellow-500 text-yellow-600 font-bold px-4 py-1 rounded-lg hover:bg-yellow-100 transition">Buy</button>
+            <div class="relative z-10 flex flex-col space-y-4 pt-40 pl-10">
+                @foreach($accessories as $accessory)
+                <div class="flex items-center space-x-6">
+                    <div class="image-with-tooltip">
+                        <img src="{{ asset('images/items/' . $accessory->image) }}"
+                            class="h-28 w-28 hover-bounce drop-shadow-md"
+                            alt="{{ $accessory->name }}">
+                        <span class="tooltip-message">Sube felicidad: {{ $accessory->happiness_effect }}</span>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <span class="text-2xl text-yellow-600 font-bold">
+                            {{ number_format($accessory->price, 2) }}
+                        </span>
+
+                        <button wire:click="buy({{ $accessory->id }})"
+                            @if($coins < $accessory->price)
+                            disabled
+                            @endif
+
+                            class="border-2 border-yellow-500 text-yellow-600 font-bold px-4 py-1 rounded-lg transition
+                            hover:bg-yellow-100 disabled:opacity-50 disabled:cursor-not-allowed">
+                            Buy
+                        </button>
+                    </div>
                 </div>
+                @endforeach
             </div>
 
-            {{-- Producto 2 --}}
-            <div class="absolute top-[270px] left-[40px] flex items-center space-x-4">
-                <img src="{{ asset('images/items/flower.png') }}" class="h-40 w-40 hover-bounce" alt="Flower">
-                <div class="flex items-center space-x-2">
-                    <span class="text-2xl text-yellow-600 font-bold">2</span>
-                    <button class="border-2 border-yellow-500 text-yellow-600 font-bold px-4 py-1 rounded-lg hover:bg-yellow-100 transition">Buy</button>
-                </div>
-            </div>
-
-            {{-- Producto 3 --}}
-            <div class="absolute top-[400px] left-[40px] flex items-center space-x-4">
-                <img src="{{ asset('images/items/teddybear.png') }}" class="h-40 w-40 hover-bounce" alt="Teddy Bear">
-                <div class="flex items-center space-x-2">
-                    <span class="text-2xl text-yellow-600 font-bold">8</span>
-                    <button class="border-2 border-yellow-500 text-yellow-600 font-bold px-4 py-1 rounded-lg hover:bg-yellow-100 transition">Buy</button>
-                </div>
-            </div>
         </div>
+
 
         {{-- Mascota centrada --}}
         <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
@@ -54,11 +57,17 @@
                 <!-- <button type="submit" class="ml-2 px-3 py-1 bg-green-600 text-white rounded">Save</button> -->
             </form>
 
-
+            @php
+            $spriteFile = trim($isSad
+            ? $pet->petType->sprite_sad
+            : $pet->petType->sprite_idle);
+            @endphp
+            
             <img
                 id="pet-image"
-                data-pet="{{ strtolower($pet->petType->name) }}"
-                src="{{ asset('images/sprites/' . strtolower($pet->petType->name) . '/' . $pet->petType->sprite_idle) }}"
+                wire:key="{{ $isSad ? 'sad' : 'idle' }}"
+                wire:poll.30s
+                src="{{ asset('images/sprites/' . strtolower($pet->petType->name) . '/' . $spriteFile) }}"
                 alt="Pet"
                 class="h-40 md:h-80 drop-shadow-2xl mx-auto transition-transform duration-300">
 
