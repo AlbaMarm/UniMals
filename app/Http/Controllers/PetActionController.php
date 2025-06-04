@@ -19,7 +19,7 @@ class PetActionController extends Controller
 
             $leveledUp = false;
             $oldLevel = $pet->level;
-            $newLevel = floor($pet->happiness / 100) + 1;
+            $newLevel = floor($pet->happiness / 50) + 1;
             if ($newLevel > $oldLevel) {
                 $pet->level = $newLevel;
                 $leveledUp = true;
