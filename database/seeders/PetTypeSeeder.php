@@ -47,7 +47,7 @@ class PetTypeSeeder extends Seeder
                 'sprite_eating' => 'sealLoope_eating.png',
                 'sprite_drinking' => 'sealLoope_drinking.png',
                 'sprite_happy' => 'sealLoope_happy.png',
-                'sprite_sad' => 'ºsealLoope_sad.png',
+                'sprite_sad' => 'sealLoope_sad.png',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
