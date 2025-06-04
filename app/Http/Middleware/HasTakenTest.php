@@ -22,9 +22,9 @@ class HasTakenTest
         }
         
         /** @var \App\Models\User $user */
-        $user = Auth::user()->load('test'); 
+        $user = Auth::user()->load(['test', 'pet']);
 
-        if (!$user->test) {
+        if (!$user->test || !$user->pet) {
             return redirect()->route('personality.test');
         }
 
