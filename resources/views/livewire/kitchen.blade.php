@@ -19,11 +19,11 @@
         <div class="flex flex-row absolute top-60 left-4 z-20 gap-4">
             <button id="eat-toggle"
                 class="bg-orange-600 text-white text-xl px-10 py-10 rounded-full shadow-lg hover:bg-orange-800 hover:text-orange-300 transition font-bold">
-                EAT
+                EAT <i class="fa-solid fa-utensils"></i>
             </button>
             <button id="drink-toggle"
                 class="bg-blue-600 text-white text-xl px-10 py-10 rounded-full shadow-lg hover:bg-blue-800 hover:text-blue-300 transition font-bold">
-                DRINK
+                DRINK <i class="fa-solid fa-droplet"></i>
             </button>
         </div>
     </div>

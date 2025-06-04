@@ -19,7 +19,7 @@
         <div class="absolute top-60 left-4 z-20">
             <button id="clean-button"
                 class="bg-green-600 text-white text-xl px-10 py-10 rounded-full shadow-lg hover:bg-green-800 hover:text-green-300 transition font-bold">
-                CLEAN
+                CLEAN <i class="fa-solid fa-shower"></i>
             </button>
         </div>
     </div>
