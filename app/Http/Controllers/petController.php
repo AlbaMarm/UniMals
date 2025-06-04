@@ -33,7 +33,7 @@ class petController extends Controller
                 'sleepiness' => 0,
             ]);
         }
-        
+
         $status = $pet->status;
 
         return response()->json([
@@ -96,8 +96,18 @@ class petController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy()
     {
-        //
+        $user = Auth::user();
+
+        if ($user->pet) {
+            $user->pet->status()->delete();
+            $user->pet->delete();
+            $user->test()->delete();
+        }
+
+        Auth::logout();
+
+        return redirect()->route('login')->with('message', 'Your pet has been deleted. Start again!');
     }
 }
