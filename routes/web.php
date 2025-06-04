@@ -3,6 +3,7 @@
 use App\Http\Controllers\PersonalityTestController;
 use App\Http\Controllers\PetActionController;
 use App\Http\Controllers\petController;
+use App\Http\Controllers\ShopController;
 use App\Livewire\Bathroom;
 use App\Livewire\Home;
 use App\Livewire\Kitchen;
@@ -28,43 +29,34 @@ Route::middleware([
         ->name('personality.test');
     Route::post('/test/{step}', [PersonalityTestController::class, 'store']);
 
-    Route::middleware('hasTest')->group(function () {
+    Route::middleware(['auth', 'verified', 'hasTest'])->group(function () {
         Route::get('/dashboard', Home::class)->name('dashboard');
-    });
-
-    Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/bathroom', Bathroom::class)->name('bathroom');
-    });
-
-    Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/kitchen', Kitchen::class)->name('kitchen');
-    });
-
-    Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/room', Room::class)->name('room');
-    });
-
-    Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/shop', Shop::class)->name('shop');
+
+        Route::post('/pet/happiness', [PetActionController::class, 'increaseHappiness'])->name('pet.happiness');
+
+        Route::post('/pet/rename', [PetActionController::class, 'rename'])->name('pet.rename');
+
+        /* Ruta Web dormir */
+        Route::post('/pet/sleep', [PetActionController::class, 'sleep'])->name('pet.sleep');
+
+        /* Ruta Web comer */
+        Route::post('/pet/eat', [PetActionController::class, 'eat'])->name('pet.eat');
+
+        /* Ruta Web beber */
+        Route::post('/pet/drink', [PetActionController::class, 'drink'])->name('pet.drink');
+
+        /* Ruta Web bañar */
+        Route::post('/pet/bathe', [PetActionController::class, 'bathe'])->name('pet.bathe');
+
+        Route::get('/pet/stats', [PetController::class, 'stats'])->name('pet.stats');
+
+        Route::get('/shop', Shop::class)->name('shop');
+
+        /* Ruta para matar mascota :c */
+        Route::delete('/pet/delete', [PetController::class, 'destroy'])->name('pet.destroy');
     });
-
-    Route::post('/pet/happiness', [PetActionController::class, 'increaseHappiness'])->name('pet.happiness');
-
-    Route::post('/pet/rename', [PetActionController::class, 'rename'])->name('pet.rename');
-
-     /* Ruta Web dormir */
-    Route::post('/pet/sleep', [PetActionController::class, 'sleep'])->name('pet.sleep');
-
-    /* Ruta Web comer */
-    Route::post('/pet/eat', [PetActionController::class, 'eat'])->name('pet.eat');
-
-    /* Ruta Web beber */
-    Route::post('/pet/drink', [PetActionController::class, 'drink'])->name('pet.drink');
-
-    /* Ruta Web bañar */
-    Route::post('/pet/bathe', [PetActionController::class, 'bathe'])->name('pet.bathe');
-
-    Route::get('/pet/stats', [PetController::class, 'stats'])->name('pet.stats');
-
-
 });
