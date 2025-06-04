@@ -14,10 +14,7 @@ $hideNav = request()->is('test*');
 
     <!-- Fontawesome -->
     <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-        integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr5
-        1Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous"
-        referrerpolicy="no-referrer" />
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"/>
 
     <!-- Sweetalert -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -87,11 +84,73 @@ $hideNav = request()->is('test*');
             transition: opacity 0.5s ease-in-out;
             animation: float 2s ease-in-out infinite;
         }
+
+        #loader-overlay {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        #loader-overlay.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+
+        /* Mensajito para los objetos de la tienda */
+        .image-with-tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip-message {
+            visibility: hidden;
+            width: max-content;
+            background-color:#000000;
+            color: #ffffff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 8px 12px;
+            position: absolute;
+            z-index: 10;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s, bottom 0.3s;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        .image-with-tooltip:hover .tooltip-message {
+            visibility: visible;
+            opacity: 1;
+            bottom: calc(100% + 10px);
+        }
+
+        /* Esto hace una flachita, para que sea como un bocadillo */
+        .tooltip-message::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #000000 transparent transparent transparent;
+        }
     </style>
 </head>
 
 <body class="font-sans antialiased">
     <x-banner />
+    <!-- Pantalla de carga -->
+    <div id="loader-overlay" class="fixed inset-0 bg-white z-50 flex items-center justify-center transition-opacity duration-500">
+        <div class="loader-animation text-center">
+            <img src="{{ asset('images/icons/loading.gif') }}" class="w-24 h-24 mb-4" alt="Loading...">
+            <p class="text-gray-600 font-medium">Loading...</p>
+        </div>
+    </div>
+
 
     <div class="min-h-screen bg-gray-100">
         @if (!$hideNav)
@@ -401,6 +460,18 @@ $hideNav = request()->is('test*');
                     }
                 });
         }, 1000);
+    </script>
+
+    <script>
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('loader-overlay');
+            if (loader) {
+                loader.classList.add('fade-out');
+                setTimeout(() => {
+                    loader.remove();
+                }, 300);
+            }
+        });
     </script>
 
 
