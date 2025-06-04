@@ -45,6 +45,23 @@
             <img src="{{ asset('images/icons/happy.png') }}" class="h-14 w-14 hover-bounce" alt="Happiness">
             <span id="happiness-value" class="text-white text-5xl font-extrabold">{{ $pet->happiness }}</span>
         </div>
+
+        <button onclick="confirmDeletePet()" class="px-4 py-2 bg-red-600 text-white rounded shadow-lg hover:bg-red-800 hover:text-red-300">
+           <i class="fa-solid fa-heart-crack"></i> Delete Pet
+        </button>
+
+        @if(count($accessorySummary))
+        <div class="bg-white bg-opacity-80 rounded-xl shadow-md mt-4 px-4 py-3 text-center space-y-1 text-sm font-medium text-gray-800">
+            <h3 class="text-lg font-bold text-yellow-700">Purchased Items</h3>
+            @foreach($accessorySummary as $name => $count)
+            <div>{{ $count }} x {{ $name }}</div>
+            @endforeach
+        </div>
+        @endif
+
+        @livewire('heal-pet')
+
+
     </div>
 
 
@@ -62,17 +79,35 @@
         </form>
 
 
+        @php
+        $spriteFile = trim($isSad
+        ? $pet->petType->sprite_sad
+        : $pet->petType->sprite_idle);
+        @endphp
+
         <img
             id="pet-image"
-            data-pet="{{ strtolower($pet->petType->name) }}"
-            src="{{ asset('images/sprites/' . strtolower($pet->petType->name) . '/' . $pet->petType->sprite_idle) }}"
+            wire:key="{{ $isSad ? 'sad' : 'idle' }}"
+            wire:poll.30s
+            src="{{ asset('images/sprites/' . strtolower($pet->petType->name) . '/' . strtolower($spriteFile)) }}"
             alt="Pet"
             class="h-40 md:h-80 drop-shadow-2xl mx-auto transition-transform duration-300">
+
 
         <div id="pet-level" class="mt-2 text-4xl font-extrabold text-white outline-white outline-2 outline px-4 py-1 rounded-full" style="text-shadow: 0 0 4px #fff, 0 0 8px #fff;">
             Lvl: {{ $pet->level }}
         </div>
+
+        @if ($lastAccessory)
+        <div class="absolute left-1/2 transform -translate-x-[180%] bottom-32 md:bottom-36 z-10">
+            <img src="{{ asset('images/items/' . $lastAccessory->image) }}"
+                alt="{{ $lastAccessory->name }}"
+                class="h-24 w-24 drop-shadow-2xl transition-transform hover:scale-105" />
+        </div>
+        @endif
+
     </div>
+
 
     {{-- Panel de estadísticas --}}
     <x-statspanel :statsList="$statsList" background="images/wood_stats.png" />
@@ -89,3 +124,27 @@
     <div class="p-6 text-white">No pet assigned</div>
     @endif
 </div>
+<script>
+    function confirmDeletePet() {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "This will delete your pet and restart the game.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch("{{ route('pet.destroy') }}", {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    }
+                }).then(() => {
+                    window.location.href = "{{ route('login') }}";
+                });
+            }
+        });
+    }
+</script>
