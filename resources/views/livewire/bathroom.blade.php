@@ -37,10 +37,18 @@
             <input type="text" name="name" class="rounded px-2 py-1" placeholder="New name" required>
             <!-- <button type="submit" class="ml-2 px-3 py-1 bg-green-600 text-white rounded">Save</button> -->
         </form>
+
+        @php
+        $spriteFile = trim($isSad
+        ? $pet->petType->sprite_sad
+        : $pet->petType->sprite_idle);
+        @endphp
+
         <img
             id="pet-image"
-            data-pet="{{ strtolower($pet->petType->name) }}"
-            src="{{ asset('images/sprites/' . strtolower($pet->petType->name) . '/' . $pet->petType->sprite_idle) }}"
+            wire:key="{{ $isSad ? 'sad' : 'idle' }}"
+            wire:poll.30s
+            src="{{ asset('images/sprites/' . strtolower($pet->petType->name) . '/' . $spriteFile) }}"
             alt="Pet"
             class="h-40 md:h-80 drop-shadow-2xl mx-auto transition-transform duration-300">
 
