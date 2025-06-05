@@ -58,11 +58,6 @@ $hideLoader = request()->is('test*');
             cursor: url('/images/cursor/cursordedo.png') 16 16, pointer;
         }
 
-
-        /*  .clickable {
-            cursor: pointer;
-        } */
-
         #sleep-overlay {
             position: fixed;
             top: 0;
