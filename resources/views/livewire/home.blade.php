@@ -104,7 +104,7 @@
             id="pet-image"
             wire:key="{{ $isSad ? 'sad' : 'idle' }}"
             wire:poll.30s
-            src="{{ asset('images/sprites/' . strtolower($pet->petType->name) . '/' . strtolower($spriteFile)) }}"
+            src="{{ asset('images/sprites/' . strtolower($pet->petType->name) . '/' . $spriteFile) }}"
             alt="Pet"
             class="h-40 md:h-80 drop-shadow-2xl mx-auto transition-transform duration-300 z-40 ">
 
