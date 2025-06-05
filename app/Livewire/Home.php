@@ -9,7 +9,6 @@ use Livewire\Component;
 
 class Home extends Component
 {
-    //refresca la pagina para que se actualicen los datos
     protected $listeners = ['refreshComponent' => '$refresh'];
     public $pet;
     public $lastAccessory;
