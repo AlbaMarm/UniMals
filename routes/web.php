@@ -39,7 +39,7 @@ Route::middleware([
 
         Route::post('/pet/happiness', [PetActionController::class, 'increaseHappiness'])->name('pet.happiness');
 
-        Route::post('/pet/rename', [PetActionController::class, 'rename'])->name('pet.rename');
+        Route::post('/pet/rename', [PetActionController::class, 'rename'])->name('pet.rename')->middleware('isAdmin');
 
         /* Ruta Web dormir */
         Route::post('/pet/sleep', [PetActionController::class, 'sleep'])->name('pet.sleep');

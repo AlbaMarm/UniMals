@@ -31,6 +31,13 @@
                 <x-input id="password_confirmation" class="block mt-1 w-full" type="password" name="password_confirmation" required autocomplete="new-password" />
             </div>
 
+            <div class="mt-4 flex items-center">
+                <x-checkbox id="is_admin" name="is_admin" :checked="old('is_admin')" />
+                <x-label for="is_admin" class="ml-2">
+                    {{ __('Register as administrator') }}
+                </x-label>
+            </div>
+
             @if (Laravel\Jetstream\Jetstream::hasTermsAndPrivacyPolicyFeature())
                 <div class="mt-4">
                     <x-label for="terms">
