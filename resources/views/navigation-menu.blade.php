@@ -1,10 +1,10 @@
 @php
 $navBg = match (true) {
-    request()->is('bathroom') => 'bg-[#a3c1a0]',  
-    request()->is('kitchen')  => 'bg-[#B8B95F]',
-    request()->is('room')     => 'bg-[#80AFC8]', 
-    request()->is('shop')     => 'bg-[#D36F6F]',
-    default => 'bg-[#bca16c]',                    
+request()->is('bathroom') => 'bg-[#a3c1a0]',
+request()->is('kitchen') => 'bg-[#B8B95F]',
+request()->is('room') => 'bg-[#80AFC8]',
+request()->is('shop') => 'bg-[#D36F6F]',
+default => 'bg-[#bca16c]',
 };
 @endphp
 
@@ -27,7 +27,7 @@ $navBg = match (true) {
 
                     $bathActive = 'text-[#2e5236] border-[#2e5236]';
                     $roomActive = 'text-[#11405A] border-[#11405A]';
-                    $kitchenActive = 'text-[#717331] border-[#717331]'; 
+                    $kitchenActive = 'text-[#717331] border-[#717331]';
                     $defaultActive = 'text-[#4b371c] border-[#4b371c]';
                     $shopActive = 'text-[#6f2d2d] border-[#6f2d2d]';
 
@@ -38,7 +38,7 @@ $navBg = match (true) {
                         class="{{ request()->routeIs('dashboard') ? "$active $defaultActive" : $inactive }}">
                         Home
                     </a>
-                    <a href="{{ route('kitchen') }}" 
+                    <a href="{{ route('kitchen') }}"
                         class="{{ request()->is('kitchen') ? "$active $kitchenActive" : $inactive }}">
                         Kitchen
                     </a>
@@ -51,6 +51,15 @@ $navBg = match (true) {
                     </a>
                     <a href="{{ route('shop') }}" class="{{ request()->is('shop') ? "$active $shopActive" : $inactive }}">
                         Shop
+                    </a>
+                    <a href="{{ route('contacto.form') }}" class="text-white hover:text-gray-200 transition" title="Contacto">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M3 8l7.89 5.26a1 1 0 001.22 0L21 8m0 8V8a2 2 0 00-2-2H5a2 2 0 
+                                  00-2 2v8a2 2 0 002 2h14a2 2 0 002-2z" />
+                        </svg>
                     </a>
                 </div>
             </div>
@@ -157,6 +166,7 @@ $navBg = match (true) {
             <x-responsive-nav-link href="{{ route('room') }}" :active="request()->routeIs('room')">Room</x-responsive-nav-link>
             <x-responsive-nav-link href="{{ route('bathroom') }}" :active="request()->routeIs('bathroom')">Bathroom</x-responsive-nav-link>
             <x-responsive-nav-link href="{{ route('shop') }}" :active="request()->routeIs('shop')">Shop</x-responsive-nav-link>
+            <x-responsive-nav-link href="{{ route('contacto.form') }}" :active="request()->routeIs('contacto.form')">Contacto</x-responsive-nav-link>
         </div>
 
         <!-- Responsive Settings Options -->

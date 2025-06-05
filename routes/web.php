@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ContactoController;
 use App\Http\Controllers\PersonalityTestController;
 use App\Http\Controllers\PetActionController;
 use App\Http\Controllers\petController;
@@ -58,5 +59,11 @@ Route::middleware([
 
         /* Ruta para matar mascota :c */
         Route::delete('/pet/delete', [PetController::class, 'destroy'])->name('pet.destroy');
+
+        Route::get('/contacto', [ContactoController::class, 'pintarFormulario'])
+            ->name('contacto.form');
+
+        Route::post('/contacto/procesar', [ContactoController::class, 'procesarFormulario'])
+            ->name('contacto.procesar');
     });
 });
