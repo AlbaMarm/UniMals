@@ -155,7 +155,7 @@ $hideLoader = request()->is('test*');
     @endif
 
 
-    <div class="min-h-screen bg-green-50">
+    <div class="min-h-screen bg-yellow-100">
         @if (!$hideNav)
         @livewire('navigation-menu')
         @endif
