@@ -2,35 +2,36 @@
 
     @if($pet)
     {{-- HUD superior --}}
-    <div class="absolute top-6 left-4 md:left-6 flex flex-col space-y-6 z-30">
+    <div class="absolute top-6 left-4 md:left-6 flex flex-col space-y-4 md:space-y-6 z-30 items-start w-full md:w-auto">
         {{-- Monedas --}}
-        <div class="flex items-center space-x-4 bg-white bg-opacity-90 border border-gray-200 rounded-full px-6 py-4 shadow-2xl">
-            <img src="{{ asset('images/icons/money.png') }}" class="h-14 w-14 hover-bounce" alt="Coins">
-            <span id="coin-value" class="text-gray-800 text-5xl font-extrabold">{{ $coins }}</span>
+        <div class="flex items-center space-x-2 md:space-x-4 bg-white bg-opacity-90 border border-gray-200 rounded-full px-4 md:px-6 py-2 md:py-4 shadow-2xl">
+            <img src="{{ asset('images/icons/money.png') }}" class="h-10 w-10 md:h-14 md:w-14 hover-bounce" alt="Coins">
+            <span id="coin-value" class="text-gray-800 text-3xl md:text-5xl font-extrabold">{{ $coins }}</span>
         </div>
 
         {{-- Felicidad --}}
-        <div class="flex items-center space-x-4 bg-black bg-opacity-70 border border-white rounded-full px-6 py-4 shadow-2xl">
-            <img src="{{ asset('images/icons/happy.png') }}" class="h-14 w-14 hover-bounce" alt="Happiness">
-            <span id="happiness-value" class="text-white text-5xl font-extrabold">{{ $pet->happiness }}</span>
+        <div class="flex items-center space-x-2 md:space-x-4 bg-black bg-opacity-70 border border-white rounded-full px-4 md:px-6 py-2 md:py-4 shadow-2xl">
+            <img src="{{ asset('images/icons/happy.png') }}" class="h-10 w-10 md:h-14 md:w-14 hover-bounce" alt="Happiness">
+            <span id="happiness-value" class="text-white text-3xl md:text-5xl font-extrabold">{{ $pet->happiness }}</span>
         </div>
 
-        {{-- Botón Dormir (Interruptor) --}}
-        <div class="flex flex-row absolute top-60 left-4 z-20 gap-4">
+        {{-- Botón comer y beber --}}
+        <div class="absolute bottom-6 right-4 flex flex-col gap-3 md:static md:flex-row md:gap-4 md:mt-8 z-30">
             <button id="eat-toggle"
-                class="bg-orange-600 text-white text-xl px-10 py-10 rounded-full shadow-lg hover:bg-orange-800 hover:text-orange-300 transition font-bold">
+                class="bg-orange-600 text-white text-sm md:text-xl px-5 md:px-10 py-4 md:py-10 rounded-full shadow-lg hover:bg-orange-800 hover:text-orange-300 transition font-bold">
                 EAT <i class="fa-solid fa-utensils"></i>
             </button>
             <button id="drink-toggle"
-                class="bg-blue-600 text-white text-xl px-10 py-10 rounded-full shadow-lg hover:bg-blue-800 hover:text-blue-300 transition font-bold">
+                class="bg-blue-600 text-white text-sm md:text-xl px-5 md:px-10 py-4 md:py-10 rounded-full shadow-lg hover:bg-blue-800 hover:text-blue-300 transition font-bold">
                 DRINK <i class="fa-solid fa-droplet"></i>
             </button>
         </div>
+
     </div>
 
 
     {{-- Mascota centrada --}}
-    <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+    <div class="flex flex-col items-center justify-center text-center relative md:absolute inset-0">
 
         <div ondblclick="document.getElementById('edit-pet-name-form').classList.remove('hidden')"
             class="bg-white bg-opacity-80 px-4 py-1 rounded-full shadow-md mb-2 inline-block font-semibold text-gray-800 mt-8 md:mt-16 cursor-custom-click">
@@ -39,7 +40,6 @@
         <form id="edit-pet-name-form" method="POST" action="{{ route('pet.rename') }}" class="hidden mt-2">
             @csrf
             <input type="text" name="name" class="rounded px-2 py-1" placeholder="New name" required>
-            <!-- <button type="submit" class="ml-2 px-3 py-1 bg-green-600 text-white rounded">Save</button> -->
         </form>
 
         @php
@@ -47,14 +47,14 @@
         ? $pet->petType->sprite_sad
         : $pet->petType->sprite_idle);
         @endphp
-        
+
         <img
             id="pet-image"
             wire:key="{{ $isSad ? 'sad' : 'idle' }}"
             wire:poll.30s
             src="{{ asset('images/sprites/' . strtolower($pet->petType->name) . '/' . $spriteFile) }}"
             alt="Pet"
-            class="h-40 md:h-80 drop-shadow-2xl mx-auto transition-transform duration-300">
+            class="h-40 md:h-80 drop-shadow-2xl mx-auto transition-transform duration-300 z-40">
 
         <div id="pet-level" class="mt-2 text-4xl font-extrabold text-white outline-white outline-2 outline px-4 py-1 rounded-full" style="text-shadow: 0 0 4px #fff, 0 0 8px #fff;">
             Lvl: {{ $pet->level }}

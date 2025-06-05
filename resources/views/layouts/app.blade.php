@@ -210,76 +210,77 @@ $hideLoader = request()->is('test*');
             const petImage = document.getElementById('pet-image');
             const happinessText = document.getElementById('happiness-value');
             const coinText = document.getElementById('coin-value');
+            if (!petImage) return;
 
-            if (petImage) {
+            petImage.addEventListener('click', () => {
                 const spritePath = petImage.getAttribute('src');
+                if (!spritePath.includes('_idle.png')) return;
                 const happySprite = spritePath.replace('_idle.png', '_happy.png');
                 const idleSprite = spritePath;
 
-                petImage.addEventListener('click', () => {
-                    // Animación
-                    petImage.style.transform = 'scale(0.95)';
-                    petImage.src = happySprite;
+                // Animación
+                petImage.style.transform = 'scale(0.95)';
+                petImage.src = happySprite;
 
-                    setTimeout(() => {
-                        petImage.style.transform = 'scale(1)';
-                        petImage.src = idleSprite;
-                    }, 1000);
+                setTimeout(() => {
+                    petImage.style.transform = 'scale(1)';
+                    petImage.src = idleSprite;
+                }, 1000);
 
-                    // AJAX: Actualizar felicidad y monedas
-                    fetch("{{ route('pet.happiness') }}", {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                            },
-                            body: JSON.stringify({})
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.happiness !== undefined && happinessText) {
-                                happinessText.textContent = data.happiness;
+                // AJAX: Actualizar felicidad y monedas
+                fetch("{{ route('pet.happiness') }}", {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: JSON.stringify({})
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.happiness !== undefined && happinessText) {
+                            happinessText.textContent = data.happiness;
+                        }
+
+                        if (data.balance !== undefined && coinText) {
+                            coinText.textContent = data.balance;
+                        }
+
+                        if (data.earned && data.earned > 0) {
+                            Swal.fire({
+                                imageUrl: 'images/icons/dollar.png',
+                                imageWidth: 100,
+                                imageHeight: 100,
+                                imageAlt: 'coin icon',
+                                title: 'You earned a coin!',
+                                timer: 2000,
+                                showConfirmButton: false,
+                            });
+                        }
+
+                        if (data.level !== undefined) {
+                            const levelDisplay = document.getElementById('pet-level');
+                            if (levelDisplay) {
+                                levelDisplay.textContent = 'Lvl: ' + data.level;
                             }
 
-                            if (data.balance !== undefined && coinText) {
-                                coinText.textContent = data.balance;
-                            }
-
-                            if (data.earned && data.earned > 0) {
+                            if (data.leveledUp) {
                                 Swal.fire({
-                                    imageUrl: 'images/icons/dollar.png',
+                                    imageUrl: 'images/icons/star.png',
                                     imageWidth: 100,
                                     imageHeight: 100,
-                                    imageAlt: 'coin icon',
-                                    title: 'You earned a coin!',
+                                    imageAlt: 'level up icon',
+                                    title: 'Your pet has leveled up!',
+                                    text: 'Level ' + data.level + ' :D',
                                     timer: 2000,
                                     showConfirmButton: false,
                                 });
                             }
+                        }
 
-                            if (data.level !== undefined) {
-                                const levelDisplay = document.getElementById('pet-level');
-                                if (levelDisplay) {
-                                    levelDisplay.textContent = 'Lvl: ' + data.level;
-                                }
+                    });
+            });
 
-                                if (data.leveledUp) {
-                                    Swal.fire({
-                                        imageUrl: 'images/icons/star.png',
-                                        imageWidth: 100,
-                                        imageHeight: 100,
-                                        imageAlt: 'level up icon',
-                                        title: 'Your pet has leveled up!',
-                                        text: 'Level ' + data.level + ' :D',
-                                        timer: 2000,
-                                        showConfirmButton: false,
-                                    });
-                                }
-                            }
-
-                        });
-                });
-            }
         });
     </script>
 
@@ -307,50 +308,51 @@ $hideLoader = request()->is('test*');
             const sleepToggle = document.getElementById('sleep-toggle');
             const overlay = document.getElementById('sleep-overlay');
             const petImage = document.getElementById('pet-image');
-            const originalSprite = petImage.getAttribute('src');
-            const sleepingSprite = originalSprite.replace('_idle.png', '_sleeping.png');
+
+            if (!sleepToggle || !overlay || !petImage) return;
 
             let sleeping = false;
             let sleepInterval = null;
 
+            sleepToggle.addEventListener('click', () => {
+                const currentSrc = petImage.getAttribute('src');
+                const sleepingSprite = currentSrc.replace(/(_idle|_sad)\.png$/, '_sleeping.png');
 
-            if (sleepToggle && overlay && petImage) {
-                sleepToggle.addEventListener('click', () => {
-                    sleeping = !sleeping;
+                sleeping = !sleeping;
 
-                    if (sleeping) {
-                        sleepToggle.textContent = 'ON';
-                        overlay.style.display = 'block';
-                        petImage.src = sleepingSprite;
+                if (sleeping) {
+                    sleepToggle.textContent = 'ON';
+                    overlay.style.display = 'block';
+                    petImage.src = sleepingSprite;
 
-                        sleepInterval = setInterval(() => {
-                            fetch("{{ route('pet.sleep') }}", {
-                                    method: 'POST',
-                                    headers: {
-                                        'Content-Type': 'application/json',
-                                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                                    },
-                                    body: JSON.stringify({})
-                                })
-                                .then(res => res.json())
-                                .then(data => {
-                                    if (data.sleepiness !== undefined) {
-                                        const sleepBar = document.querySelector('[data-stat="sleepiness"]');
-                                        if (sleepBar) sleepBar.style.width = data.sleepiness + '%';
-                                    }
-                                });
-                        }, 2000);
+                    sleepInterval = setInterval(() => {
+                        fetch("{{ route('pet.sleep') }}", {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                },
+                                body: JSON.stringify({})
+                            })
+                            .then(res => res.json())
+                            .then(data => {
+                                if (data.sleepiness !== undefined) {
+                                    const sleepBar = document.querySelector('[data-stat="sleepiness"]');
+                                    if (sleepBar) sleepBar.style.width = data.sleepiness + '%';
+                                }
+                            });
+                    }, 2000);
 
-                    } else {
-                        sleepToggle.textContent = 'OFF';
-                        overlay.style.display = 'none';
-                        petImage.src = originalSprite;
-                        clearInterval(sleepInterval);
-                    }
-                });
-            }
+                } else {
+                    sleepToggle.textContent = 'OFF';
+                    overlay.style.display = 'none';
+                    petImage.src = currentSrc;
+                    clearInterval(sleepInterval);
+                }
+            });
         });
     </script>
+
 
     <!-- Script animacion comer y beber -->
     <script>
@@ -358,61 +360,65 @@ $hideLoader = request()->is('test*');
             const eatToggle = document.getElementById('eat-toggle');
             const drinkToggle = document.getElementById('drink-toggle');
             const petImage = document.getElementById('pet-image');
-            const originalSprite = petImage.getAttribute('src');
-            const eatingSprite = originalSprite.replace('_idle.png', '_eating.png');
-            const drinkingSprite = originalSprite.replace('_idle.png', '_drinking.png');
 
-            if (eatToggle && drinkToggle && petImage) {
-                eatToggle.addEventListener('click', () => {
-                    petImage.src = eatingSprite;
+            if (!eatToggle || !drinkToggle || !petImage) return;
 
-                    fetch("{{ route('pet.eat') }}", {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                            },
-                            body: JSON.stringify({})
-                        })
-                        .then(res => res.json())
-                        .then(data => {
-                            if (data.hunger !== undefined) {
-                                const hungerBar = document.querySelector('[data-stat="hunger"]');
-                                if (hungerBar) hungerBar.style.width = data.hunger + '%';
-                            }
-                        });
+            eatToggle.addEventListener('click', () => {
+                const currentSrc = petImage.getAttribute('src');
+                const eatingSprite = currentSrc.replace(/(_idle|_sad)\.png$/, '_eating.png');
 
-                    setTimeout(() => {
-                        petImage.src = originalSprite;
-                    }, 2000);
-                });
+                petImage.src = eatingSprite;
 
-                drinkToggle.addEventListener('click', () => {
-                    petImage.src = drinkingSprite;
+                fetch("{{ route('pet.eat') }}", {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: JSON.stringify({})
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.hunger !== undefined) {
+                            const hungerBar = document.querySelector('[data-stat="hunger"]');
+                            if (hungerBar) hungerBar.style.width = data.hunger + '%';
+                        }
+                    });
 
-                    fetch("{{ route('pet.drink') }}", {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                            },
-                            body: JSON.stringify({})
-                        })
-                        .then(res => res.json())
-                        .then(data => {
-                            if (data.thirst !== undefined) {
-                                const thirstBar = document.querySelector('[data-stat="thirst"]');
-                                if (thirstBar) thirstBar.style.width = data.thirst + '%';
-                            }
-                        });
+                setTimeout(() => {
+                    petImage.src = currentSrc;
+                }, 2000);
+            });
 
-                    setTimeout(() => {
-                        petImage.src = originalSprite;
-                    }, 2000);
-                });
-            }
+            drinkToggle.addEventListener('click', () => {
+                const currentSrc = petImage.getAttribute('src');
+                const drinkingSprite = currentSrc.replace(/(_idle|_sad)\.png$/, '_drinking.png');
+
+                petImage.src = drinkingSprite;
+
+                fetch("{{ route('pet.drink') }}", {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: JSON.stringify({})
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.thirst !== undefined) {
+                            const thirstBar = document.querySelector('[data-stat="thirst"]');
+                            if (thirstBar) thirstBar.style.width = data.thirst + '%';
+                        }
+                    });
+
+                setTimeout(() => {
+                    petImage.src = currentSrc;
+                }, 2000);
+            });
         });
     </script>
+
 
     <!-- script animacion burbujas baño -->
     <script>

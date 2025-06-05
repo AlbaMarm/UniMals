@@ -38,19 +38,6 @@ class Pet extends Model
         return $this->hasOne(PetStatus::class);
     }
 
-    // Con interaction
-    public function interactions(): HasMany
-    {
-        return $this->hasMany(Interaction::class);
-    }
-
-    // Con happiness_history
-    public function happinessHistories(): HasMany
-    {
-        return $this->hasMany(HappinessHistory::class);
-    }
-
-
 
 
 }

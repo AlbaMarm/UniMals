@@ -33,31 +33,46 @@
 
     @if($pet)
     {{-- HUD superior --}}
-    <div class="absolute top-6 left-4 md:left-6 flex flex-col space-y-6 z-30">
+    <div class="absolute top-6 left-4 md:left-6 flex flex-col space-y-4 md:space-y-6 z-30 items-start w-full md:w-auto">
         {{-- Monedas --}}
-        <div class="flex items-center space-x-4 bg-white bg-opacity-90 border border-gray-200 rounded-full px-6 py-4 shadow-2xl">
-            <img src="{{ asset('images/icons/money.png') }}" class="h-14 w-14 hover-bounce" alt="Coins">
-            <span id="coin-value" class="text-gray-800 text-5xl font-extrabold">{{ $coins }}</span>
+        <div class="flex items-center space-x-2 md:space-x-4 bg-white bg-opacity-90 border border-gray-200 rounded-full px-4 md:px-6 py-2 md:py-4 shadow-2xl">
+            <img src="{{ asset('images/icons/money.png') }}" class="h-10 w-10 md:h-14 md:w-14 hover-bounce" alt="Coins">
+            <span id="coin-value" class="text-gray-800 text-3xl md:text-5xl font-extrabold">{{ $coins }}</span>
         </div>
 
         {{-- Felicidad --}}
-        <div class="flex items-center space-x-4 bg-black bg-opacity-70 border border-white rounded-full px-6 py-4 shadow-2xl">
-            <img src="{{ asset('images/icons/happy.png') }}" class="h-14 w-14 hover-bounce" alt="Happiness">
-            <span id="happiness-value" class="text-white text-5xl font-extrabold">{{ $pet->happiness }}</span>
+        <div class="flex items-center space-x-2 md:space-x-4 bg-black bg-opacity-70 border border-white rounded-full px-4 md:px-6 py-2 md:py-4 shadow-2xl">
+            <img src="{{ asset('images/icons/happy.png') }}" class="h-10 w-10 md:h-14 md:w-14 hover-bounce" alt="Happiness">
+            <span id="happiness-value" class="text-white text-3xl md:text-5xl font-extrabold">{{ $pet->happiness }}</span>
         </div>
 
         <button onclick="confirmDeletePet()" class="px-4 py-2 bg-red-600 text-white rounded shadow-lg hover:bg-red-800 hover:text-red-300">
-           <i class="fa-solid fa-heart-crack"></i> Delete Pet
+            <i class="fa-solid fa-heart-crack"></i> Delete Pet
         </button>
 
         @if(count($accessorySummary))
-        <div class="bg-white bg-opacity-80 rounded-xl shadow-md mt-4 px-4 py-3 text-center space-y-1 text-sm font-medium text-gray-800">
-            <h3 class="text-lg font-bold text-yellow-700">Purchased Items</h3>
-            @foreach($accessorySummary as $name => $count)
-            <div>{{ $count }} x {{ $name }}</div>
-            @endforeach
+        <div class="absolute top-6 right-4 md:static z-30 w-44 md:w-auto">
+
+            <div class="bg-white bg-opacity-80 rounded-xl shadow-md px-4 py-3 
+                text-center md:text-left space-y-1 text-sm font-medium text-gray-800">
+                <h3 class="text-lg font-bold text-yellow-700">Purchased Items</h3>
+                @foreach($accessorySummary as $name => $count)
+                <div>{{ $count }} x {{ $name }}</div>
+                @endforeach
+            </div>
+
+            {{-- Imagen debajo solo en móvil --}}
+            @if ($lastAccessory)
+            <div class="mt-2 block md:hidden">
+                <img src="{{ asset('images/items/' . $lastAccessory->image) }}"
+                    alt="{{ $lastAccessory->name }}"
+                    class="h-20 w-20 mx-auto drop-shadow-2xl transition-transform hover:scale-105" />
+            </div>
+            @endif
+
         </div>
         @endif
+
 
         @livewire('heal-pet')
 
@@ -66,7 +81,8 @@
 
 
     {{-- Mascota centrada --}}
-    <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+    <div class="flex flex-col items-center justify-center text-center 
+            relative md:absolute inset-0">
 
         <div ondblclick="document.getElementById('edit-pet-name-form').classList.remove('hidden')"
             class="bg-white bg-opacity-80 px-4 py-1 rounded-full shadow-md mb-2 inline-block font-semibold text-gray-800 mt-8 md:mt-16 cursor-custom-click">
@@ -75,7 +91,6 @@
         <form id="edit-pet-name-form" method="POST" action="{{ route('pet.rename') }}" class="hidden mt-2">
             @csrf
             <input type="text" name="name" class="rounded px-2 py-1" placeholder="New name" required>
-            <!-- <button type="submit" class="ml-2 px-3 py-1 bg-green-600 text-white rounded">Save</button> -->
         </form>
 
 
@@ -91,7 +106,7 @@
             wire:poll.30s
             src="{{ asset('images/sprites/' . strtolower($pet->petType->name) . '/' . strtolower($spriteFile)) }}"
             alt="Pet"
-            class="h-40 md:h-80 drop-shadow-2xl mx-auto transition-transform duration-300">
+            class="h-40 md:h-80 drop-shadow-2xl mx-auto transition-transform duration-300 z-40 ">
 
 
         <div id="pet-level" class="mt-2 text-4xl font-extrabold text-white outline-white outline-2 outline px-4 py-1 rounded-full" style="text-shadow: 0 0 4px #fff, 0 0 8px #fff;">
@@ -99,7 +114,8 @@
         </div>
 
         @if ($lastAccessory)
-        <div class="absolute left-1/2 transform -translate-x-[180%] bottom-32 md:bottom-36 z-10">
+        <div class="absolute left-1/2 transform -translate-x-[180%] bottom-32 md:bottom-36 z-10 hidden md:block">
+
             <img src="{{ asset('images/items/' . $lastAccessory->image) }}"
                 alt="{{ $lastAccessory->name }}"
                 class="h-24 w-24 drop-shadow-2xl transition-transform hover:scale-105" />
@@ -111,15 +127,6 @@
 
     {{-- Panel de estadísticas --}}
     <x-statspanel :statsList="$statsList" background="images/wood_stats.png" />
-
-
-    {{-- BOTONES INFERIORES --}}
-    <!-- <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-6 z-30">
-            <button class="px-6 py-3 bg-white/80 rounded-full shadow-lg font-semibold pointer-events-auto">LOGOUT</button>
-            <button class="px-6 py-3 bg-red-600/80 rounded-full shadow-lg font-semibold text-white pointer-events-auto">DELETE</button>
-        </div> -->
-
-
     @else
     <div class="p-6 text-white">No pet assigned</div>
     @endif

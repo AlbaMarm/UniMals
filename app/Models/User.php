@@ -83,12 +83,6 @@ class User extends Authenticatable
         return $this->hasOne(PersonalityTest::class);
     }
 
-    // Con interactions
-    public function interactions(): HasMany
-    {
-        return $this->hasMany(Interaction::class);
-    }
-
     // Con coins
     public function coins(): HasOne
     {

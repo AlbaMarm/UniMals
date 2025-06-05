@@ -4,7 +4,7 @@
         <span class="text-xs font-bold text-green-200">[100%]</span>
     </x-button>
 
-    <x-dialog-modal wire:model="openModal">
+    <x-dialog-modal wire:model="openModal" class="z-70">
         <x-slot name="title">
             <span class="text-red-600 font-bold">Heal Pet</span>
         </x-slot>
