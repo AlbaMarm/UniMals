@@ -43,6 +43,13 @@ $hideLoader = request()->is('test*');
             transform: translateY(-8px) rotate(-3deg);
         }
 
+        #motivational-toast {
+            max-width: 80%;
+            text-align: center;
+            white-space: pre-line;
+        }
+
+
         /* Cursores */
         body {
             cursor: url('/images/cursor/cursormano.png') 16 16, auto;
@@ -223,6 +230,36 @@ $hideLoader = request()->is('test*');
                     petImage.style.transform = 'scale(1)';
                     petImage.src = idleSprite;
                 }, 1000);
+
+                const messages = [
+                    "Your pet adores you!",
+                    "You're doing a great job!",
+                    "Thanks for taking such good care of your Unimal!",
+                    "Keep it up, your pet loves you!",
+                    "You're their favorite human!",
+                    "Your pet is so happy!",
+                    "Your pet is so grateful for your love!",
+                    "Your pet is so lucky to have you!",
+                    "Remember to drink water!",
+                    "Your friends are always there for you!",
+                ];
+
+                if (Math.random() < 0.4) {
+                    const randomIndex = Math.floor(Math.random() * messages.length);
+                    const toast = document.getElementById('motivational-toast');
+                    const message = document.getElementById('motivational-message');
+
+                    if (toast && message) {
+                        message.textContent = messages[randomIndex];
+                        toast.classList.remove('hidden');
+                        toast.classList.add('opacity-100');
+
+                        setTimeout(() => {
+                            toast.classList.add('hidden');
+                        }, 2500);
+                    }
+                }
+
 
                 // AJAX: Actualizar felicidad y monedas
                 fetch("{{ route('pet.happiness') }}", {
@@ -482,6 +519,11 @@ $hideLoader = request()->is('test*');
             }
         });
     </script>
+
+    <div id="motivational-toast" class="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 hidden px-4 py-2 border border-yellow-400 bg-white/80 text-yellow-600 font-semibold rounded-lg shadow-lg transition-all duration-500">
+        <span id="motivational-message"></span>
+    </div>
+
 
 
 </body>
