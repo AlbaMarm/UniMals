@@ -43,10 +43,29 @@ $hideLoader = request()->is('test*');
             transform: translateY(-8px) rotate(-3deg);
         }
 
+        /* mensajito motivacional arriba */
         #motivational-toast {
-            max-width: 80%;
+            top: 80px; 
+            max-width: 90%;
+            padding: 8px 20px;
+            border-radius: 9999px; 
+            font-size: 1rem;
+            font-weight: 600;
+            background-color: rgba(255, 255, 255, 0.85);
+            color: #d97706; 
+            border: 2px solid #facc15;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            white-space: nowrap;
+            z-index: 9999;
             text-align: center;
-            white-space: pre-line;
+            opacity: 0;
+            transform: translate(-50%, -20px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        #motivational-toast.show {
+            opacity: 1;
+            transform: translate(-50%, 0);
         }
 
 
@@ -232,16 +251,16 @@ $hideLoader = request()->is('test*');
                 }, 1000);
 
                 const messages = [
-                    "Your pet adores you!",
-                    "You're doing a great job!",
-                    "Thanks for taking such good care of your Unimal!",
-                    "Keep it up, your pet loves you!",
-                    "You're their favorite human!",
-                    "Your pet is so happy!",
-                    "Your pet is so grateful for your love!",
-                    "Your pet is so lucky to have you!",
-                    "Remember to drink water!",
-                    "Your friends are always there for you!",
+                    "⯨ Your pet adores you! ⯩",
+                    "⯨ You're doing a great job! ⯩",
+                    "⯨ Thanks for taking such good care of your Unimal! ⯩",
+                    "⯨ Keep it up, your pet loves you! ⯩",
+                    "⯨ You're their favorite human! ⯩",
+                    "⯨ Your pet is so happy! ⯩",
+                    "⯨ Your pet is so grateful for your love! ⯩",
+                    "⯨ Your pet is so lucky to have you! ⯩",
+                    "⯨ Remember to drink water! ⯩",
+                    "⯨ Your friends are always there for you! ⯩",
                 ];
 
                 if (Math.random() < 0.4) {
@@ -252,9 +271,10 @@ $hideLoader = request()->is('test*');
                     if (toast && message) {
                         message.textContent = messages[randomIndex];
                         toast.classList.remove('hidden');
-                        toast.classList.add('opacity-100');
+                        toast.classList.add('show');
 
                         setTimeout(() => {
+                            toast.classList.remove('show');
                             toast.classList.add('hidden');
                         }, 2500);
                     }
@@ -519,13 +539,6 @@ $hideLoader = request()->is('test*');
             }
         });
     </script>
-
-    <div id="motivational-toast" class="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 hidden px-4 py-2 border border-yellow-400 bg-white/80 text-yellow-600 font-semibold rounded-lg shadow-lg transition-all duration-500">
-        <span id="motivational-message"></span>
-    </div>
-
-
-
 </body>
 
 </html>

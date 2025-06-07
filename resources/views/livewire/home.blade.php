@@ -127,6 +127,10 @@
 
     {{-- Panel de estadísticas --}}
     <x-statspanel :statsList="$statsList" background="images/wood_stats.png" />
+    <div id="motivational-toast" class="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 hidden px-4 py-2 border border-yellow-400 bg-white/80 text-yellow-600 font-semibold rounded-lg shadow-lg transition-all duration-500">
+        <span id="motivational-message"></span>
+    </div>
+
     @else
     <div class="p-6 text-white">No pet assigned</div>
     @endif
