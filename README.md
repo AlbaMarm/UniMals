@@ -122,3 +122,4 @@ If you’d like to see the feedback emails in your inbox during development, you
 
 ---
 ### Copyright (c) 2025 AlbaMarm
+Este proyecto está bajo una licencia [MIT](LICENSE.txt).
