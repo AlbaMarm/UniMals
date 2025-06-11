@@ -11,6 +11,11 @@
 
 ---
 
+## ✧ Link ✧
+Click [here](http://ec2-54-156-230-60.compute-1.amazonaws.com/) to try my app! 
+
+---
+
 ## ✧ Features ✧
 
 - 🎮 **Interactive Pet**
