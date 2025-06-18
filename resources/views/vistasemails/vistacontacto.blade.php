@@ -1,7 +1,4 @@
 @component('mail::message')
-{{-- Logo de la app --}}
-<img src="{{ asset('images/appicon.svg') }}" alt="{{ config('app.name') }}" width="80" class="mx-auto mb-4">
-
 {{-- Panel verde de encabezado --}}
 @component('mail::panel', ['color' => 'success'])
 # You have received feedback!
