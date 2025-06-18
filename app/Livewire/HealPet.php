@@ -8,9 +8,14 @@ use Livewire\Component;
 class HealPet extends Component
 {
     public bool $openModal = false;
+    public bool $hasHealed   = false;
 
     public function curar()
     {
+        if ($this->hasHealed) {
+            return;
+        }
+
         $pet = Auth::user()->pet;
         if ($pet && $pet->status) {
             $pet->status->update([
@@ -21,6 +26,7 @@ class HealPet extends Component
             ]);
         }
 
+        $this->hasHealed = true;
         $this->dispatch('refreshComponent');
         $this->cerrar();
     }

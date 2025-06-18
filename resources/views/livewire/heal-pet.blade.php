@@ -17,7 +17,12 @@
         <x-slot name="footer">
             <div class="flex justify-end space-x-4">
                 <button wire:click="curar"
-                    class="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
+                    @disabled($hasHealed)
+                    class=" inline-flex items-center px-4 py-2 text-white rounded transition
+                      {{ $hasHealed
+                          ? 'bg-green-400 opacity-50 cursor-not-allowed'
+                          : 'bg-green-600 hover:bg-green-700'
+                      }}">
                     <i class="fas fa-heart-pulse mr-2"></i> Accept
                 </button>
                 <button wire:click="cerrar"
