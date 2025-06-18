@@ -20,7 +20,7 @@
                     @disabled($hasHealed)
                     class=" inline-flex items-center px-4 py-2 text-white rounded transition
                       {{ $hasHealed
-                          ? 'bg-green-400 opacity-50 cursor-not-allowed'
+                          ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
                           : 'bg-green-600 hover:bg-green-700'
                       }}">
                     <i class="fas fa-heart-pulse mr-2"></i> Accept
