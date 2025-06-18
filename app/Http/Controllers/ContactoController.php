@@ -18,7 +18,7 @@ class ContactoController extends Controller
         $destinatario = config('mail.from.address');
 
         $request->validate([
-            'name' => ['required', 'string', 'min:5', 'max:60'],
+            'name' => ['required', 'string', 'min:4', 'max:60'],
             'body' => ['required', 'string', 'min:10', 'max:150'],
         ]);
 

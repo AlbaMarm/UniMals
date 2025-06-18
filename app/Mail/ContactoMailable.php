@@ -13,7 +13,6 @@ class ContactoMailable extends Mailable
 {
     use Queueable, SerializesModels;
 
-    // Ahora solo necesitamos nombre y body
     public function __construct(
         public string $nombre,
         public string $body
@@ -25,7 +24,6 @@ class ContactoMailable extends Mailable
      */
     public function envelope(): Envelope
     {
-        // Usamos la dirección que esté en MAIL_FROM_ADDRESS (y nombre que quieras)
         return new Envelope(
             from: new Address(
                 config('mail.from.address'),

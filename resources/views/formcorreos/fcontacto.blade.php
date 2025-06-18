@@ -30,7 +30,7 @@
                             id="name"
                             name="name"
                             value="{{ old('name') }}"
-                            placeholder="Your name (min 5 characters)"
+                            placeholder="Your name (min 4 characters)"
                             class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg 
                                    bg-white text-gray-900 placeholder-gray-400 
                                    focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
